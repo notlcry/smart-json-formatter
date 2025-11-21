@@ -1,12 +1,17 @@
 import { GoogleGenAI } from "@google/genai";
 
-// Initialize the client
-// Note: API_KEY is guaranteed to be available in process.env.API_KEY
-const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+// Initialize the client lazily inside the function
+// const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
 
 export const fixJsonWithGemini = async (input: string): Promise<string> => {
-  const model = 'gemini-2.5-flash';
-  
+  const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
+  if (!apiKey) {
+    throw new Error("Gemini API Key is missing. Please set VITE_GEMINI_API_KEY in your environment.");
+  }
+
+  const ai = new GoogleGenAI({ apiKey });
+  const model = 'gemini-2.0-flash';
+
   const prompt = `
     You are a smart JSON repair engine.
     The user has provided an input string that represents a data structure but is not valid JSON.
@@ -34,14 +39,14 @@ export const fixJsonWithGemini = async (input: string): Promise<string> => {
     });
 
     let text = response.text;
-    
+
     if (!text) {
       throw new Error("Empty response from AI");
     }
 
     // Cleanup if the model added markdown despite instructions
     text = text.replace(/^```json\s*/, '').replace(/^```\s*/, '').replace(/\s*```$/, '');
-    
+
     return text.trim();
   } catch (error) {
     console.error("Gemini API Error:", error);
