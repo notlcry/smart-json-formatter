@@ -1,0 +1,5 @@
+{
+  "name": "Smart JSON Formatter",
+  "description": "A smart JSON formatting tool that handles standard JSON, single-quoted JSON (Python style), and escaped stringified JSON using local logic and Gemini AI.",
+  "requestFramePermissions": []
+}
