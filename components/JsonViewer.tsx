@@ -14,9 +14,10 @@ interface JsonNodeProps {
     isLast: boolean;
     depth: number;
     diff?: DiffNode; // Pass diff node down
+    inheritedDiffType?: 'added' | 'removed'; // Pass down added/removed state
 }
 
-const JsonNode: React.FC<JsonNodeProps> = ({ name, value, isLast, depth, diff }) => {
+const JsonNode: React.FC<JsonNodeProps> = ({ name, value, isLast, depth, diff, inheritedDiffType }) => {
     const [expanded, setExpanded] = useState(true);
 
     const handleToggle = (e: React.MouseEvent) => {
@@ -34,14 +35,20 @@ const JsonNode: React.FC<JsonNodeProps> = ({ name, value, isLast, depth, diff })
     let diffClass = '';
     let diffMarker = null;
 
-    if (diff) {
-        if (diff.type === 'added') {
+    const effectiveType = diff?.type || inheritedDiffType;
+
+    if (effectiveType) {
+        if (effectiveType === 'added') {
             diffClass = 'bg-green-100/50 text-green-800';
+            // Only show marker if it's the root of the change (has explicit diff) or if we want it on every line
+            // Usually for block adds, we might want marker on every line or just the top. 
+            // Let's put it on every line for consistency with git diffs, or just use the background.
+            // If inherited, we still want the marker to show it's part of the addition.
             diffMarker = <span className="text-green-600 mr-1">+</span>;
-        } else if (diff.type === 'removed') {
+        } else if (effectiveType === 'removed') {
             diffClass = 'bg-red-100/50 text-red-800';
             diffMarker = <span className="text-red-600 mr-1">-</span>;
-        } else if (diff.type === 'updated' && !isObject) {
+        } else if (effectiveType === 'updated' && !isObject) {
             diffClass = 'bg-yellow-100/50 text-yellow-800';
             diffMarker = <span className="text-yellow-600 mr-1">~</span>;
         }
@@ -143,6 +150,7 @@ const JsonNode: React.FC<JsonNodeProps> = ({ name, value, isLast, depth, diff })
                                 isLast={index === arr.length - 1}
                                 depth={depth + 1}
                                 diff={diff?.children?.[key]}
+                                inheritedDiffType={effectiveType === 'added' || effectiveType === 'removed' ? effectiveType : undefined}
                             />
                         ))
                     )}
