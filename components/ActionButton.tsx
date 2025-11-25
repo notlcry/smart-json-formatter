@@ -33,15 +33,15 @@ export const ActionButton: React.FC<ActionButtonProps> = ({
     <button
       onClick={onClick}
       disabled={disabled || loading}
-      className={`${baseStyles} ${variants[variant]} ${className} flex-col !px-2 !py-3 gap-1 h-auto`}
+      className={`${baseStyles} ${variants[variant]} ${className} flex-col !px-1 !py-2 gap-0.5 h-auto`}
       title={label}
     >
       {loading ? (
-        <Loader2 className="w-5 h-5 animate-spin" />
+        <Loader2 className="w-4 h-4 animate-spin" />
       ) : (
-        icon && <span className="w-5 h-5">{icon}</span>
+        icon && <span className="w-4 h-4">{icon}</span>
       )}
-      <span className="text-[10px] leading-none text-center">{label}</span>
+      <span className="text-[10px] leading-none text-center scale-90">{label}</span>
     </button>
   );
 };

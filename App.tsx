@@ -187,7 +187,7 @@ const App: React.FC = () => {
         <div className="flex-1 flex p-4 md:p-6 w-full gap-4 h-full">
 
           {/* Sidebar Controls */}
-          <div className="flex-none w-16 bg-white p-2 rounded-xl border border-zinc-200 flex flex-col items-center gap-3 backdrop-blur-md z-20 shadow-xl h-full overflow-y-auto">
+          <div className="flex-none w-14 bg-white p-1.5 rounded-xl border border-zinc-200 flex flex-col items-center gap-2 backdrop-blur-md z-20 shadow-xl h-full overflow-y-auto">
             <ActionButton
               label="Format"
               icon={<FileJson />}
@@ -294,8 +294,8 @@ Examples:
               {/* Status Bar Overlay */}
               <div className="absolute top-0 right-0 z-10">
                 {(successMsg || error) && (
-                  <div className={`flex items - center gap - 2 px - 3 py - 1 rounded - bl - lg text - xs animate - fade -in shadow - lg backdrop - blur - md
-                    ${error ? 'bg-red-500/20 text-red-700 border-b border-l border-red-500/30' : 'bg-green-500/20 text-green-700 border-b border-l border-green-500/30'} `}>
+                  <div className={`flex items-center gap-2 px-3 py-1 rounded-bl-lg text-xs animate-fade-in shadow-lg
+                    ${error ? 'bg-red-50 text-red-700 border-b border-l border-red-200' : 'bg-green-50 text-green-700 border-b border-l border-green-200'}`}>
                     {error ? <AlertCircle className="w-3 h-3" /> : <CheckCircle2 className="w-3 h-3" />}
                     <span>{error || successMsg}</span>
                   </div>
