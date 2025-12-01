@@ -141,7 +141,11 @@ const App: React.FC = () => {
   // Auto-format effect
   useEffect(() => {
     const timer = setTimeout(() => {
-      if (!input.trim()) return;
+      if (!input.trim()) {
+        setOutput('');
+        setError(null);
+        return;
+      }
 
       const result = smartLocalParse(input);
       if (result.success) {
@@ -304,7 +308,14 @@ Examples:
 
               {mode === 'diff' ? (
                 diffResult ? (
-                  <JsonViewer data={diffOutput} diff={diffResult} label="Diff Result" />
+                  diffResult.type === 'unchanged' ? (
+                    <div className="flex flex-col items-center justify-center h-full text-zinc-400 gap-2">
+                      <CheckCircle2 className="w-8 h-8 text-green-500" />
+                      <span className="font-medium text-zinc-600">The two JSONs are identical</span>
+                    </div>
+                  ) : (
+                    <JsonViewer data={diffOutput} diff={diffResult} label="Diff Result" />
+                  )
                 ) : (
                   <div className="flex items-center justify-center h-full text-zinc-400 text-sm">
                     Enter two valid JSON objects to see the difference.
